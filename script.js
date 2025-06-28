@@ -119,11 +119,55 @@ function addMessageToChat(message, sender) {
 
     messageContent.appendChild(messageText);
     messageContent.appendChild(timeSpan);
+
+    if (sender === 'ai') {
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.innerHTML = '📋';
+        copyButton.title = 'Copy message';
+        copyButton.addEventListener('click', function(){
+            copyMessageToClipboard(message, copyButton);
+        });
+        messageContent.appendChild(copyButton);
+    }
+
     messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
+function copyMessageToClipboard(message, button) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = message;
+    const cleanText = tempDiv.textContent || tempDiv.innerText || '';
+
+    navigator.clipboard.writeText(cleanText).then(function(){
+        const originalText = button.innerHTML;
+        button.innerHTML = '✅';
+        button.style.color = '#28a745';
+
+        setTimeout(function(){
+            button.innerHTML = originalText;
+            button.style.color = '';
+        }, 1500);
+    }).catch(function(err) {
+        const textArea = document.createElement('textarea');
+        textArea.value = cleanText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        const originalText = button.innerHTML;
+        button.innerHTML = '✅';
+        button.style.color = '#28a745';
+
+        setTimeout(function() {
+            button.innerHTML = originalText;
+            button.style.color = '';
+        }, 1500);
+    });
 }
 
 function formatAIMessage(text) {
