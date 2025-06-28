@@ -57,7 +57,7 @@ async function sendMessage() {
 
     messageInput.value = '';
     messageInput.disabled = true;
-    messageInput.placeholder = 'AI is thinking...'
+    messageInput.placeholder = 'AI is thinking...';
     sendButton.disabled = true;
     
 
@@ -77,12 +77,9 @@ async function sendMessage() {
         const data = await response.json();
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
-            throw new Error(`HTTP ${response.status}: ${errorText}`);
+            console.error('Error response:', data);
+            throw new Error(`HTTP ${response.status}: ${JSON.stringify(data)}`);
         } 
-        
-        const data = await response.json();
 
         if (data.choices && data.choices[0] && data.choices[0].message) {
             addMessageToChat(data.choices[0].message.content, 'ai');
@@ -97,7 +94,7 @@ async function sendMessage() {
     }
 
     messageInput.disabled = false;
-    messageInput.placeholder = 'Type your message here...'
+    messageInput.placeholder = 'Type your message here... (Shift+Enter for new line)';
     sendButton.disabled = false;
 
     messageInput.style.height = 'auto';
