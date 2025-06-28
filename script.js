@@ -76,11 +76,21 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        if (response.ok && data.choices && data.choices[0]) {
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        } 
+        
+        const data = await response.json();
+
+        if (data.choices && data.choices[0] && data.choices[0].message) {
             addMessageToChat(data.choices[0].message.content, 'ai');
         } else {
-            addMessageToChat('Sorry, something went wrong. Please try again.', 'ai');
+            console.error('Unexpected response format:', data);
+            addMessageToChat('Sorry, I received an unexpected response format.', 'ai');
         }
+
     } catch (error) {
         console.error('Error:', error);
         addMessageToChat('Sorry, I couldn\'t connect to the AI. Please check your connection and try again.', 'ai');
