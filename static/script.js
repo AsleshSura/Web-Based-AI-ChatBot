@@ -7,7 +7,7 @@ const loadingIndicator = document.getElementById('loadingIndicator');
 document.addEventListener('DOMContentLoaded', function(){
     sendButton.addEventListener('click', sendMessage);
 
-    messageInput.addEventListener('keypress', function(event){
+    messageInput.addEventListener('keydown', function(event){
         if (event.key === 'Enter') {
             if (event.shiftKey) {
                 return;
@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function(){
     messageInput.addEventListener('input', function(){
         autoResizeTextArea(this);
     });
+
+    messageInput.focus();
 });
 
 async function sendMessage() {
@@ -33,9 +35,9 @@ async function sendMessage() {
 
     messageInput.value = '';
     messageInput.disabled = true;
+    messageInput.placeholder = 'AI is thinking...'
     sendButton.disabled = true;
     
-    showLoading(true);
 
     try {
         const response = await fetch('/chat', {
@@ -59,8 +61,8 @@ async function sendMessage() {
     }
 
     messageInput.disabled = false;
+    messageInput.placeholder = 'Type your message here...'
     sendButton.disabled = false;
-    showLoading(false);
 
     messageInput.style.height = 'auto';
     messageInput.focus();
