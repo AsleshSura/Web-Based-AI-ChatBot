@@ -22,6 +22,28 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     messageInput.focus();
+
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.textContent = '☀️';
+    }
+
+    themeToggle.addEventListener('click', function(){
+        document.body.classList.toggle('dark-mode');
+
+        if (document.body.classList.contains('dark-mode')) {
+            themeIcon.textContent = '☀️';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeIcon.textContent = '🌙';
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
 });
 
 async function sendMessage() {
