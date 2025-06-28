@@ -7,7 +7,7 @@ CORS(app)
 
 @app.route('/')
 def home():
-    render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -39,7 +39,7 @@ def get_ai_response(message):
 
     data = {
           "messages": [
-               {'roles': "user", 'content': message}
+               {'role': "user", 'content': message}
           ]
      }
 

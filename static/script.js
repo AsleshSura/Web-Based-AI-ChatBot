@@ -9,10 +9,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
     messageInput.addEventListener('keypress', function(event){
         if (event.key === 'Enter') {
-            sendMessage();
+            if (event.shiftKey) {
+                return;
+            } else {
+                event.preventDefault();
+                sendMessage();
+            }
         }
     });
-    messageInput.focus();
+    messageInput.addEventListener('input', function(){
+        autoResizeTextArea(this);
+    });
 });
 
 async function sendMessage() {
@@ -55,6 +62,7 @@ async function sendMessage() {
     sendButton.disabled = false;
     showLoading(false);
 
+    messageInput.style.height = 'auto';
     messageInput.focus();
 }
 
@@ -65,14 +73,47 @@ function addMessageToChat(message, sender) {
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
 
-    const messageParagraph = document.createElement('p');
-    messageParagraph.textContent = message;
+    const messageText = document.createElement('div');
 
-    messageContent.appendChild(messageParagraph);
+    const formattedMessage = formatAIMessage(message);
+    messageText.innerHTML = formattedMessage;
+
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'timestamp';
+    timeSpan.textContent = getCurrentTime();
+
+    messageContent.appendChild(messageText);
+    messageContent.appendChild(timeSpan);
     messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+}
+
+function formatAIMessage(text) {
+    // Replace bold formatting
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/__(.*?)__/g, '<strong>$1</strong>');
+
+    // Replace italic formatting (simplified to avoid lookbehind issues)
+    text = text.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+    text = text.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+    
+    // Replace code blocks and inline code
+    text = text.replace(/```(.*?)```/gs, '<div class="code-block">$1</div>');
+    text = text.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+    
+    // Replace line breaks
+    text = text.replace(/\n/g, '<br>');
+    
+    // Replace numbered lists
+    text = text.replace(/^(\d+)\.\s(.+)$/gm, '<div class="list-item numbered">$1. $2</div>');
+    
+    // Replace bullet lists
+    text = text.replace(/^[-*]\s(.+)$/gm, '<div class="list-item bullet">• $1</div>');
+    
+    return text;
 }
 
 function showLoading(show) {
@@ -83,6 +124,12 @@ function showLoading(show) {
     }
 }
 
+function autoResizeTextArea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+}
+
+
 function getCurrentTime() {
     const now = new Date();
     return now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
@@ -90,14 +137,14 @@ function getCurrentTime() {
 
 
 document.addEventListener('keydown', function(event){
-    if (event.key == 'Escape') {
+    if (event.key === 'Escape') {
         messageInput.value = '';
-        messageInput.focus()
+        messageInput.focus();
     }
 
     if ((event.ctrlKey || event.metaKey) && event.key === 'l') {
         event.preventDefault();
-        messageInput.focus()
+        messageInput.focus();
     }
 });
 
