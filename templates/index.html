@@ -1,9 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
     </head>
     <body>
-        
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>Web-Based AI ChatBot</h1>
+                <p>Powered by HackClub AI</p>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message-content">
+                    <p>Hello! I'm your AI assistant. How can I help you today?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Type your message here..."
+                    maxlength="500"
+                >
+                <button id="sendButton">
+                    <span>Send</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="loading-indicator" id="loadingIndicator">
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p>AI is thinking...</p>
+        </div>
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
+
     </body>
 </html>
