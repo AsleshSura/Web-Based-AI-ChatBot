@@ -62,18 +62,22 @@ async function sendMessage() {
     
 
     try {
-        const response = await fetch('/chat', {
+        const response = await fetch('/https://ai.hackclub.com/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({message: message})
+            body: JSON.stringify({
+                messages: [
+                    {role: 'user', content: message}
+                ]
+            })
         });
 
         const data = await response.json();
 
-        if (data.status === 'success') {
-            addMessageToChat(data.response, 'ai');
+        if (response.ok && data.choices && data.choices[0]) {
+            addMessageToChat(data.choices[0].messageContent, 'ai');
         } else {
             addMessageToChat('Sorry, something went wrong. Please try again.', 'ai');
         }
