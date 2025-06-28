@@ -1,3 +1,4 @@
+"""
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import requests
@@ -56,3 +57,4 @@ def get_ai_response(message):
 
 if __name__ == '__main__':
      app.run(debug=True, port=5000)
+"""
