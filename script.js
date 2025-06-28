@@ -125,7 +125,7 @@ function addMessageToChat(message, sender) {
         copyButton.className = 'copy-button';
         copyButton.innerHTML = '📋';
         copyButton.title = 'Copy message';
-        copyButton.addEventListener('click', function(){
+        copyButton.addEventListener('click', function() {
             copyMessageToClipboard(message, copyButton);
         });
         messageContent.appendChild(copyButton);
@@ -142,12 +142,12 @@ function copyMessageToClipboard(message, button) {
     tempDiv.innerHTML = message;
     const cleanText = tempDiv.textContent || tempDiv.innerText || '';
 
-    navigator.clipboard.writeText(cleanText).then(function(){
+    navigator.clipboard.writeText(cleanText).then(function() {
         const originalText = button.innerHTML;
         button.innerHTML = '✅';
         button.style.color = '#28a745';
 
-        setTimeout(function(){
+        setTimeout(function() {
             button.innerHTML = originalText;
             button.style.color = '';
         }, 1500);

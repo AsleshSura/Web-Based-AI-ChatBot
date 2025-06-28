@@ -335,7 +335,7 @@ body.dark-mode {
     font-size: 12px;
     display: flex;
     align-items: center;
-    justify-self: center;
+    justify-content: center;
     opacity: 0;
     transition: all 0.2s ease;
     backdrop-filter: blur(4px);
