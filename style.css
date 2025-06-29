@@ -636,10 +636,24 @@ body.dark-mode {
     color: #ecf0f1;
 }
 
+.dark-mode .new-session-btn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+.dark-mode .new-session-btn:hover {
+    transform: scale(1.1);
+}
+
+.session-item.active {
+    background: #4facfe;
+    color: white;
+    border-left: 3px solid #00f2fe;
+}
+
 @keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateY(-50) scale(0.9);
+        transform: translateY(-50px) scale(0.9);
     }
     to {
         opacity: 1;

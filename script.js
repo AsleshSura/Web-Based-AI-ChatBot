@@ -2,7 +2,6 @@
 const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
 const chatMessages = document.getElementById('chatMessages');
-const loadingIndicator = document.getElementById('loadingIndicator');
 
 let currentSessionId = null;
 let chatSessions = {};
