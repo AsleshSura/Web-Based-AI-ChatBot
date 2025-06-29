@@ -92,6 +92,7 @@ body {
     padding: 20px;
     padding-bottom: 100px;
     overflow-y: auto;
+    overflow-x: visible;
     background: #f8f9fa;
 }
 
@@ -118,6 +119,7 @@ body {
 .ai-message {
     justify-content: flex-start;
     position: relative;
+    margin-right: 50px;
 }
 
 .ai-message .message-content {
@@ -346,15 +348,6 @@ body.dark-mode {
     background: rgba(52, 73, 94, 0.9);
     color: #ecf0f1;
     border: 1px solid rgba(52, 73, 94, 0.3);
-}
-
-.dark-mode .copy-button {
-    background: rgba(52, 73, 94, 0.8);
-    color: #ecf0f1;
-}
-
-.dark-mode .copy-button:hover {
-    background: rgba(52, 73, 94, 0.95);
 }
 
 .copy-button {
