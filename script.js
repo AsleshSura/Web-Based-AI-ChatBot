@@ -25,7 +25,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('.theme-icon');
+
     const clearChatButton = document.getElementById('clearChatButton');
+    const exportChatButton = document.getElementById('exportChatButton');
+    const exportModal = document.getElementById('exportModal');
+    const closeExportModal = document.getElementById('closeExportModal');
+    const exportJSONBtn = document.getElementById('exportJSON');
+    const exportTXTBtn = document.getElementById('exportTXT');
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -48,6 +54,23 @@ document.addEventListener('DOMContentLoaded', function(){
     clearChatButton.addEventListener('click', function(){
         clearChat();
     });
+
+    exportChatButton.addEventListener('click', function(){
+        if (exportChatButton.target === exportModal) {
+            exportModal.classList.remove('show');
+        }
+    });
+
+    exportJSONBtn.addEventListener('click', function(){
+        exportChatAsJSON();
+        exportModal.classList.remove('show');
+    });
+
+    exportTXTBtn.addEventListener('click', function(){
+        exportChatAsText();
+        exportModal.classList.remove('show');
+    });
+
 
     // Load chat history and add welcome message if no history exists
     loadChatHistory();
@@ -337,4 +360,80 @@ function clearChat() {
         // Add welcome message back
         addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
     }
+}
+
+function exportChatAsJSON() {
+    const messages = getChatData();
+
+    const exportData = {
+        exportDate: new Date().toISOString(),
+        charTitle: "AI Chat Conversation",
+        messageCount: message.length,
+        messages:messages
+    };
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    downloadFile(jsonString, 'chat-export.json', 'application/json');
+}
+
+function exportChatAsText() {
+    const messages = getChatData();
+
+    let textContent = `AI Chat Conversation\n`;
+    textContent += `Exported: ${new Date().toLocaleString()}\n`;
+    textContent += `Total Messages: ${messages.length}\n`;
+
+    messages.forEach((msg, index) => {
+       const sender = msg.sender === 'ai' ? 'AI Assistant' : 'You';
+       const cleanContent = stripHTML(msg.content);
+       textContent += `[${msg.timestamp}] ${sender}:\n{cleanContent}\n\n`; 
+    });
+
+    downloadFile(textContent, 'chat-export.txt', 'text/plain');
+}
+
+function getChatData() {
+    const messages = [];
+    const messageElements = chatMessages.querySelectorAll('.message');
+
+    messageElements.forEach(messageE1 => {
+        const messageContent = messageE1.querySelector('.message-content > div');
+        const timestamp = messageE1.querySelector('.timestamp');
+        const isAI = messageE1.classList.contains('ai-message');
+
+        if (messageContent && timestamp) {
+            messages.push({
+                content: messageContent.innerHTML,
+                sender: isAI ? 'ai' : 'user',
+                timestamp: timestamp.textContent,
+                plainText: stripHTML(messageContent.innerHTML)
+            });
+        }
+    })
+    return messages;
+}
+
+function stripHTML(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+}
+
+function downloadFile(content, filename, contentType) {
+    const blob = new Blob([content], { type: contentType});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = filename;
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    const exportMessage = `Chat exported successfully as ${filename}`;
+    addMessageToChat(`${exportMessage}`, 'ai');
 }
