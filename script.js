@@ -94,7 +94,26 @@ document.addEventListener('DOMContentLoaded', function(){
     
     // Initialize layout optimization
     initializeLayoutOptimization();
+    
+    // Start with sidebar collapsed for maximum chat space
+    initializeSidebarCollapsed();
 });
+
+// Initialize sidebar as collapsed by default
+function initializeSidebarCollapsed() {
+    const sessionsSidebar = document.getElementById('sessionsSidebar');
+    const chatContainer = document.querySelector('.chat-container');
+    
+    // Start with sidebar collapsed to maximize chat space
+    sessionsSidebar.classList.add('collapsed');
+    chatContainer.classList.add('full-width');
+    
+    // Ensure layout is optimized after initialization
+    setTimeout(() => {
+        adjustLayoutToFullViewport();
+        optimizeChatContainer();
+    }, 100);
+}
 
 // Layout optimization functions
 function initializeLayoutOptimization() {
@@ -121,14 +140,7 @@ function adjustLayoutToFullViewport() {
     body.style.padding = '0';
     body.style.overflow = 'hidden';
     
-    // Force sidebar to full height
-    if (sidebar) {
-        sidebar.style.height = '100vh';
-        sidebar.style.margin = '0';
-        sidebar.style.maxHeight = '100vh';
-    }
-    
-    // Force chat container to full height and available width
+    // Force chat container to full height
     if (chatContainer) {
         chatContainer.style.height = '100vh';
         chatContainer.style.margin = '0';
@@ -137,11 +149,26 @@ function adjustLayoutToFullViewport() {
         // If sidebar is collapsed, take full width
         if (sidebar && sidebar.classList.contains('collapsed')) {
             chatContainer.style.width = '100vw';
+            chatContainer.style.borderRadius = '1.5vw';
+            sidebar.style.width = '0';
+            sidebar.style.minWidth = '0';
         } else {
-            // Calculate available width
+            // Calculate available width when sidebar is visible
             const sidebarWidth = sidebar ? sidebar.offsetWidth : 0;
             chatContainer.style.width = `calc(100vw - ${sidebarWidth}px)`;
+            chatContainer.style.borderRadius = '0 1.5vw 1.5vw 0';
+            if (sidebar) {
+                sidebar.style.width = 'clamp(250px, 25vw, 320px)';
+                sidebar.style.minWidth = '250px';
+            }
         }
+    }
+    
+    // Force sidebar to full height when visible
+    if (sidebar && !sidebar.classList.contains('collapsed')) {
+        sidebar.style.height = '100vh';
+        sidebar.style.margin = '0';
+        sidebar.style.maxHeight = '100vh';
     }
 }
 

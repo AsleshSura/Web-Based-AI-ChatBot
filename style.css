@@ -41,6 +41,8 @@ body {
 .chat-container.full-width {
     border-radius: 1.5vw;
     margin: 0;
+    width: 100vw;
+    border-radius: 1.5vw 1.5vw 1.5vw 1.5vw;
 }
 
 .chat-container.full-width .chat-input-container {
@@ -673,6 +675,10 @@ body.dark-mode {
 
 .sessions-sidebar.collapsed {
     transform: translateX(-100%);
+    width: 0;
+    min-width: 0;
+    margin: 0;
+    visibility: hidden;
 }
 
 .sessions-header {
