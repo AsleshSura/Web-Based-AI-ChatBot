@@ -56,9 +56,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     exportChatButton.addEventListener('click', function(){
-        if (exportChatButton.target === exportModal) {
-            exportModal.classList.remove('show');
-        }
+        exportModal.classList.add('show');
     });
 
     closeExportModal.addEventListener('click', function(){
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function(){
         if (e.target === exportModal) {
             exportModal.classList.remove('show');
         }
-    })
+    });
 
     exportJSONBtn.addEventListener('click', function(){
         exportChatAsJSON();
@@ -392,7 +390,7 @@ function exportChatAsText() {
     let textContent = `AI Chat Conversation\n`;
     textContent += `Exported: ${new Date().toLocaleString()}\n`;
     textContent += `Total Messages: ${messages.length}\n`;
-    textContent += `${'='.repeat(50)}\n\n`
+    textContent += `${'='.repeat(50)}\n\n`;
 
     messages.forEach((msg, index) => {
        const sender = msg.sender === 'ai' ? 'AI Assistant' : 'You';
@@ -445,6 +443,6 @@ function downloadFile(content, filename, contentType) {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    const exportMessage = `Chat exported successfully as ${filename}`;
+    const exportMessage = `Chat exported successfully as ${filename}!`;
     addMessageToChat(`📥 ${exportMessage}`, 'ai');
 }
