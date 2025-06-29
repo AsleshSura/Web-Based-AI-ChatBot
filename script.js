@@ -194,7 +194,7 @@ function addMessageToChat(message, sender) {
 
     if (currentSessionId && sender == 'ai') {
         const session = chatSessions[currentSessionId];
-        if (session && session.message.length >=2 && session.name.startsWith('Chat ')) {
+        if (session && session.messages.length >=2 && session.name.startsWith('Chat ')) {
             setTimeout(() => generateSessionTitle(currentSessionId), 1000);
         }
     }
