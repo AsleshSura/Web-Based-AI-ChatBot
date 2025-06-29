@@ -4,6 +4,9 @@ const sendButton = document.getElementById('sendButton');
 const chatMessages = document.getElementById('chatMessages');
 const loadingIndicator = document.getElementById('loadingIndicator');
 
+let currentSessionId = null;
+let chatSessions = {};
+
 document.addEventListener('DOMContentLoaded', function(){
     sendButton.addEventListener('click', sendMessage);
 
@@ -32,6 +35,14 @@ document.addEventListener('DOMContentLoaded', function(){
     const closeExportModal = document.getElementById('closeExportModal');
     const exportJSONBtn = document.getElementById('exportJSON');
     const exportTXTBtn = document.getElementById('exportTXT');
+    
+    const newSessionBtn = document.getElementById('newSessionBtn');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sessionsSidebar = document.getElementById('sessionsSidebar');
+    const sessionsList = document.getElementById('sessionsList');
+
+    newSessionBtn.addEventListener('click', createNewSession);
+    sidebarToggle.addEventListener('click', toggleSidebar);
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -81,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
     // Load chat history and add welcome message if no history exists
-    loadChatHistory();
+    loadChatSessions();
 });
 
 async function sendMessage() {
@@ -289,37 +300,9 @@ document.addEventListener('keydown', function(event) {
 
 // Chat history functions
 function saveChatHistory() {
-    const messages = [];
-    const messageElements = chatMessages.querySelectorAll('.message');
-    
-    messageElements.forEach(messageEl => {
-        const messageContent = messageEl.querySelector('.message-content > div');
-        const timestamp = messageEl.querySelector('.timestamp');
-        const isAI = messageEl.classList.contains('ai-message');
-        
-        if (messageContent && timestamp) {
-            messages.push({
-                content: messageContent.innerHTML,
-                sender: isAI ? 'ai' : 'user',
-                timestamp: timestamp.textContent
-            });
-        }
-    });
-    
-    localStorage.setItem('chatHistory', JSON.stringify(messages));
-}
-
-function loadChatHistory() {
-    const savedHistory = localStorage.getItem('chatHistory');
-    
-    if (savedHistory) {
-        const messages = JSON.parse(savedHistory);
-        messages.forEach(msg => {
-            addMessageToHistory(msg.content, msg.sender, msg.timestamp);
-        });
-    } else {
-        // Add welcome message if no history exists
-        addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
+    if (currentSessionId) {
+        saveCurrentSession();
+        saveChatSessions();
     }
 }
 
@@ -362,11 +345,14 @@ function addMessageToHistory(message, sender, timestamp) {
 }
 
 function clearChat() {
-    if (confirm('Are you sure you want to clear all chat history? This cannot be undone.')) {
-        chatMessages.innerHTML = '';
-        localStorage.removeItem('chatHistory');
-        // Add welcome message back
-        addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
+    if (confirm('Are you sure you want to clear this chat session? This cannot be undone.')) {
+        if (currentSessionId) {
+            chatSessions[currentSessionId].messages = [];
+            chatMessages.innerHTML = '';
+            addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
+            saveChatSessions();
+            renderSessionsList();
+        }
     }
 }
 
@@ -405,7 +391,7 @@ function getChatData() {
     const messages = [];
     const messageElements = chatMessages.querySelectorAll('.message');
 
-    messageElements.forEach(messageE1 => {
+    messageElements.forEach(messageEl => {
         const messageContent = messageE1.querySelector('.message-content > div');
         const timestamp = messageE1.querySelector('.timestamp');
         const isAI = messageE1.classList.contains('ai-message');
@@ -445,4 +431,130 @@ function downloadFile(content, filename, contentType) {
 
     const exportMessage = `Chat exported successfully as ${filename}!`;
     addMessageToChat(`📥 ${exportMessage}`, 'ai');
+}
+
+function createNewSession() {
+    const sessionId = 'session_' + Date.now();
+    const sessionName = `Chat ${Object.keys(chatSessions).length + 1}`;
+
+    chatSessions[sessionId] = {
+        id: sessionId,
+        name: sessionName,
+        messages: [],
+        createdAt: new Date().toISOString(),
+        LastActive: new Date().toISOString()
+    };
+
+    switchToSession(sessionId);
+    saveChatSessions();
+    renderSessionsList();
+}
+
+function switchToSession(sessionId) {
+    if (currentSessionId) {
+        saveCurrentSession();
+    }
+
+    currentSessionId = sessionId;
+
+    chatMessages.innerHTML = '';
+    const session = chatSessions[sessionId];
+
+    if (session.messages.length === 0) {
+        addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
+    } else {
+        session.messages.forEach(msg => {
+            addMessageToHistory(msg.content, msg.sender, msg.timestamp);
+        });
+    }
+
+    updateActiveSession();
+
+    chatSessions[sessionId].lastActive = new Date().toISOString();
+    saveChatSessions();
+}
+
+function saveCurrentSession() {
+    if (!currentSessionId) return;
+
+    const messages = [];
+    const messageElements = chatMessages.querySelectorAll('.message');
+
+    messageElements.forEach(messageEl => {
+        const messageContent = messageE1.querySelector('.message-content > div');
+        const timestamp = messageE1.querySelector('.timestamp');
+        const isAI = messageE1.classList.contains('ai-message');
+
+        if (messageContent && timestamp) {
+            messages.push({
+                content: messageContent.innerHTML,
+                sender: isAI ? 'ai': 'user',
+                timestamp: timestamp.textContent
+            });
+        }
+    });
+
+    chatSessions[currentSessionId].messages = messages;
+    chatMessages[currentSessionId].lastActive = new Date().toISOString();
+}
+
+function renderSessionsList() {
+    sessionsList.innerHTML = '';
+
+    const sortedSessions = Object.values(chatSessions).sort((a,b) => new Date(b.lastActive) - new Date(a.lastActive));
+
+    sortedSessions.forEach(session => {
+        const sessionEl = document.createElement('div');
+        sessionEl.className = 'session-item';
+        sessionEl.dataset.sessionId = session.id;
+
+        if (session.id === currentSessionId) {
+            sessionEl.classList.add('active');
+        }
+
+        const preview = session.messages.length > 0 ? stripHTML(sendMessage.messages[session.messages.length - 1].content).substring(0, 50) + '...' : 'New conversation';
+
+        sessionEl.innerHTML = `
+            <div class="session-title">${session.name}</div>
+            <div class="session-preview">${preview}</div>
+            <div class="session-date">${new Date(session.lastActive).toLocaleDateString()}</div>
+        `;
+
+        sessionEl.addEventListener('click', () => switchToSession(sessionId));
+        sessionsList.appendChild(sessionEl);
+    });
+}
+
+function updateActiveSession() {
+    document.querySelectorAll('.session-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    const activeItem = document.querySelector(`[data-session-id="${currentSessionId}"]`);
+    if (activeItem) {
+        activeItem.classList.add('active');
+    }
+}
+
+function loadChatSessions() {
+    const saved = localStorage.getItem('chatSessions');
+
+    if (saved) {
+        chatSessions = JSON.parse(saved);
+
+        if (Object.keys(chatSessions).length > 0) {
+            const lastSession = Object.values(chatSessions).sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive))[0];
+            switchToSession(lastSession.id);
+        } else {
+            createNewSession();
+        }
+    } else {
+        createNewSession();
+    }
+
+    renderSessionsList();
+}
+
+function saveChatSessions() {
+    localStorage.setItem('chatSessions', JSON.stringify(chatSessions));
 }
