@@ -44,6 +44,49 @@ body {
     opacity: 0.9;
 }
 
+.header-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.clear-chat-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-size: 16px;
+    color: white;
+}
+
+.clear-chat-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
 .chat-messages {
     flex: 1;
     padding: 20px;
@@ -87,6 +130,14 @@ body {
 }
 .message-content em {
     font-style: italic;
+}
+
+.timestamp {
+    display: block;
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 4px;
+    text-align: right;
 }
 
 .code-block {
@@ -220,23 +271,6 @@ body {
     transform: translateY(0);
 }
 
-.theme-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
 .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
@@ -349,6 +383,27 @@ body.dark-mode {
 
 .copy-button:active {
     transform: scale(.95);
+}
+
+.dark-mode .copy-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.dark-mode .clear-chat-button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.dark-mode .clear-chat-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.dark-mode .theme-toggle {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .message:hover .copy-button {

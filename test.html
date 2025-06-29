@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        .pass { background-color: #d4edda; color: #155724; }
+        .fail { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Chatbot Functionality Test</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        function runTests() {
+            const results = [];
+            
+            // Test 1: Check if main files exist
+            try {
+                // This test would need to be done differently in a real environment
+                results.push({
+                    test: "HTML structure test",
+                    passed: document.querySelector('script[src="script.js"]') !== null,
+                    details: "Script tag found in HTML"
+                });
+            } catch (e) {
+                results.push({
+                    test: "HTML structure test", 
+                    passed: false,
+                    details: e.message
+                });
+            }
+            
+            // Test 2: Check localStorage functionality
+            try {
+                localStorage.setItem('test', 'value');
+                const value = localStorage.getItem('test');
+                localStorage.removeItem('test');
+                results.push({
+                    test: "localStorage functionality",
+                    passed: value === 'value',
+                    details: "localStorage read/write works"
+                });
+            } catch (e) {
+                results.push({
+                    test: "localStorage functionality",
+                    passed: false,
+                    details: e.message
+                });
+            }
+            
+            // Test 3: Check if fetch API is available
+            results.push({
+                test: "Fetch API availability",
+                passed: typeof fetch === 'function',
+                details: "Fetch API is " + (typeof fetch === 'function' ? "available" : "not available")
+            });
+            
+            displayResults(results);
+        }
+        
+        function displayResults(results) {
+            const container = document.getElementById('test-results');
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <strong>${result.test}</strong>: ${result.passed ? 'PASS' : 'FAIL'}<br>
+                    ${result.details}
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+    </script>
+    
+    <h2>Manual Tests</h2>
+    <ol>
+        <li>Open the main chatbot page (index.html)</li>
+        <li>Check if the welcome message appears with timestamp and copy button</li>
+        <li>Try typing a message and sending it</li>
+        <li>Test the dark/light mode toggle</li>
+        <li>Test the clear chat button</li>
+        <li>Test Shift+Enter for new lines</li>
+        <li>Test the Konami code (↑↑↓↓←→←→BA)</li>
+    </ol>
+    
+    <p><a href="index.html">Open Main Chatbot</a></p>
+</body>
+</html>

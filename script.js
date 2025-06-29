@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('.theme-icon');
+    const clearChatButton = document.getElementById('clearChatButton');
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -44,6 +45,12 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+    clearChatButton.addEventListener('click', function(){
+        clearChat();
+    });
+
+    // Load chat history and add welcome message if no history exists
+    loadChatHistory();
 });
 
 async function sendMessage() {
@@ -102,6 +109,8 @@ async function sendMessage() {
 }
 
 function addMessageToChat(message, sender) {
+    console.log('Adding message:', sender, message); // Debug line
+
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}-message`;
 
@@ -135,6 +144,9 @@ function addMessageToChat(message, sender) {
     chatMessages.appendChild(messageDiv);
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Save chat history after adding message
+    saveChatHistory();
 }
 
 function copyMessageToClipboard(message, button) {
@@ -239,7 +251,90 @@ document.addEventListener('keydown', function(event) {
     }
 
     if (konamiCode.join(',') === konamiSequence.join(',')) {
-        addMessageToChat(' Konami code activated! You found the secret!', 'ai');
+        addMessageToChat('🎮 Konami code activated! You found the secret!', 'ai');
         konamiCode = [];
     }
 });
+
+// Chat history functions
+function saveChatHistory() {
+    const messages = [];
+    const messageElements = chatMessages.querySelectorAll('.message');
+    
+    messageElements.forEach(messageEl => {
+        const messageContent = messageEl.querySelector('.message-content > div');
+        const timestamp = messageEl.querySelector('.timestamp');
+        const isAI = messageEl.classList.contains('ai-message');
+        
+        if (messageContent && timestamp) {
+            messages.push({
+                content: messageContent.innerHTML,
+                sender: isAI ? 'ai' : 'user',
+                timestamp: timestamp.textContent
+            });
+        }
+    });
+    
+    localStorage.setItem('chatHistory', JSON.stringify(messages));
+}
+
+function loadChatHistory() {
+    const savedHistory = localStorage.getItem('chatHistory');
+    
+    if (savedHistory) {
+        const messages = JSON.parse(savedHistory);
+        messages.forEach(msg => {
+            addMessageToHistory(msg.content, msg.sender, msg.timestamp);
+        });
+    } else {
+        // Add welcome message if no history exists
+        addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
+    }
+}
+
+function addMessageToHistory(message, sender, timestamp) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+
+    const messageText = document.createElement('div');
+    messageText.innerHTML = message; // Already formatted
+
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'timestamp';
+    timeSpan.textContent = timestamp;
+
+    messageContent.appendChild(messageText);
+    messageContent.appendChild(timeSpan);
+
+    if (sender === 'ai') {
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.innerHTML = '📋';
+        copyButton.title = 'Copy message';
+        
+        // Extract plain text from formatted message for copying
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = message;
+        const plainText = tempDiv.textContent || tempDiv.innerText || '';
+        
+        copyButton.addEventListener('click', function() {
+            copyMessageToClipboard(plainText, copyButton);
+        });
+        messageContent.appendChild(copyButton);
+    }
+
+    messageDiv.appendChild(messageContent);
+    chatMessages.appendChild(messageDiv);
+}
+
+function clearChat() {
+    if (confirm('Are you sure you want to clear all chat history? This cannot be undone.')) {
+        chatMessages.innerHTML = '';
+        localStorage.removeItem('chatHistory');
+        // Add welcome message back
+        addMessageToChat('Hello! I\'m your AI assistant. How can I help you today?', 'ai');
+    }
+}

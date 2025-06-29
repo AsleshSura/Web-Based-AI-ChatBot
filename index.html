@@ -10,15 +10,18 @@
             <div class="chat-header">
                 <h1>Web-Based AI ChatBot</h1>
                 <p>Powered by HackClub AI</p>
-                <button class="theme-toggle" id="themeToggle">
-                    <span class="theme-icon">🌙</span>
-                </button>
+                <div class="header-controls">
+                    <button class="clear-chat-button" id="clearChatButton" title="Clear chat history">
+                        🗑️
+                    </button>
+                    <button class="theme-toggle" id="themeToggle">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
             </div>
 
             <div class="chat-messages" id="chatMessages">
-                <div class="message-content">
-                    <p>Hello! I'm your AI assistant. How can I help you today?</p>
-                </div>
+                <!-- Messages will be added here dynamically -->
             </div>
         </div>
 
