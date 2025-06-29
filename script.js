@@ -448,7 +448,7 @@ async function generateSessionTitle(sessionId) {
         messagesToSummarize.forEach(msg => {
             const sender = msg.sender == 'user' ? 'User' : 'AI';
             const content = stripHTML(msg.content).substring(0, 200);
-            conversationContext += `${sender}: #{content}\n`;
+            conversationContext += `${sender}: ${content}\n`;
         });
 
         const titlePrompt = `Based on this conversation, generate a short, descriptive title (max 4 words) that captures the main topic or question. Only respond with the title, nothing else:\n\n${conversationContext}`;
