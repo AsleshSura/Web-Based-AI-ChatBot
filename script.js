@@ -392,9 +392,9 @@ function getChatData() {
     const messageElements = chatMessages.querySelectorAll('.message');
 
     messageElements.forEach(messageEl => {
-        const messageContent = messageE1.querySelector('.message-content > div');
-        const timestamp = messageE1.querySelector('.timestamp');
-        const isAI = messageE1.classList.contains('ai-message');
+        const messageContent = messageEl.querySelector('.message-content > div');
+        const timestamp = messageEl.querySelector('.timestamp');
+        const isAI = messageEl.classList.contains('ai-message');
 
         if (messageContent && timestamp) {
             messages.push({
@@ -442,7 +442,7 @@ function createNewSession() {
         name: sessionName,
         messages: [],
         createdAt: new Date().toISOString(),
-        LastActive: new Date().toISOString()
+        lastActive: new Date().toISOString()
     };
 
     switchToSession(sessionId);
@@ -481,9 +481,9 @@ function saveCurrentSession() {
     const messageElements = chatMessages.querySelectorAll('.message');
 
     messageElements.forEach(messageEl => {
-        const messageContent = messageE1.querySelector('.message-content > div');
-        const timestamp = messageE1.querySelector('.timestamp');
-        const isAI = messageE1.classList.contains('ai-message');
+        const messageContent = messageEl.querySelector('.message-content > div');
+        const timestamp = messageEl.querySelector('.timestamp');
+        const isAI = messageEl.classList.contains('ai-message');
 
         if (messageContent && timestamp) {
             messages.push({
@@ -495,7 +495,7 @@ function saveCurrentSession() {
     });
 
     chatSessions[currentSessionId].messages = messages;
-    chatMessages[currentSessionId].lastActive = new Date().toISOString();
+    chatSessions[currentSessionId].lastActive = new Date().toISOString();
 }
 
 function renderSessionsList() {
