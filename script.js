@@ -40,11 +40,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const sessionsList = document.getElementById('sessionsList');
 
     newSessionBtn.addEventListener('click', createNewSession);
-    sidebarToggle.addEventListener('click', function() {
-        console.log('Sidebar toggle clicked'); // Debug line
-        sessionsSidebar.classList.toggle('collapsed');
-        document.querySelector('.chat-container').classList.toggle('full-width');
-    });
+    sidebarToggle.addEventListener('click', toggleSidebarAndAdjustLayout);
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -95,7 +91,105 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Load chat history and add welcome message if no history exists
     loadChatSessions();
+    
+    // Initialize layout optimization
+    initializeLayoutOptimization();
 });
+
+// Layout optimization functions
+function initializeLayoutOptimization() {
+    adjustLayoutToFullViewport();
+    optimizeChatContainer();
+    
+    // Listen for window resize
+    window.addEventListener('resize', debounce(adjustLayoutToFullViewport, 100));
+    
+    // Listen for orientation change on mobile
+    window.addEventListener('orientationchange', function() {
+        setTimeout(adjustLayoutToFullViewport, 100);
+    });
+}
+
+function adjustLayoutToFullViewport() {
+    const body = document.body;
+    const chatContainer = document.querySelector('.chat-container');
+    const sidebar = document.querySelector('.sessions-sidebar');
+    
+    // Ensure body uses full viewport
+    body.style.height = '100vh';
+    body.style.margin = '0';
+    body.style.padding = '0';
+    body.style.overflow = 'hidden';
+    
+    // Force sidebar to full height
+    if (sidebar) {
+        sidebar.style.height = '100vh';
+        sidebar.style.margin = '0';
+        sidebar.style.maxHeight = '100vh';
+    }
+    
+    // Force chat container to full height and available width
+    if (chatContainer) {
+        chatContainer.style.height = '100vh';
+        chatContainer.style.margin = '0';
+        chatContainer.style.maxHeight = '100vh';
+        
+        // If sidebar is collapsed, take full width
+        if (sidebar && sidebar.classList.contains('collapsed')) {
+            chatContainer.style.width = '100vw';
+        } else {
+            // Calculate available width
+            const sidebarWidth = sidebar ? sidebar.offsetWidth : 0;
+            chatContainer.style.width = `calc(100vw - ${sidebarWidth}px)`;
+        }
+    }
+}
+
+function optimizeChatContainer() {
+    const chatContainer = document.querySelector('.chat-container');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatHeader = document.querySelector('.chat-header');
+    const inputContainer = document.querySelector('.chat-input-container');
+    
+    if (chatContainer && chatMessages && chatHeader && inputContainer) {
+        // Calculate available height for messages
+        const headerHeight = chatHeader.offsetHeight;
+        const inputHeight = inputContainer.offsetHeight;
+        const availableHeight = window.innerHeight - headerHeight - inputHeight;
+        
+        // Set messages container to fill available space
+        chatMessages.style.height = `${availableHeight}px`;
+        chatMessages.style.maxHeight = `${availableHeight}px`;
+        chatMessages.style.overflowY = 'auto';
+    }
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Update sidebar toggle to include layout adjustment
+function toggleSidebarAndAdjustLayout() {
+    const sessionsSidebar = document.getElementById('sessionsSidebar');
+    const chatContainer = document.querySelector('.chat-container');
+    
+    sessionsSidebar.classList.toggle('collapsed');
+    chatContainer.classList.toggle('full-width');
+    
+    // Adjust layout after toggle
+    setTimeout(() => {
+        adjustLayoutToFullViewport();
+        optimizeChatContainer();
+    }, 300); // Wait for CSS transition
+}
 
 async function sendMessage() {
     const message = messageInput.value.trim();
@@ -188,6 +282,9 @@ function addMessageToChat(message, sender) {
     chatMessages.appendChild(messageDiv);
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Optimize layout after adding message
+    optimizeChatContainer();
 
     // Save chat history after adding message
     saveChatHistory();
@@ -528,6 +625,11 @@ function switchToSession(sessionId) {
 
     chatSessions[sessionId].lastActive = new Date().toISOString();
     saveChatSessions();
+    
+    // Optimize layout after switching sessions
+    setTimeout(() => {
+        optimizeChatContainer();
+    }, 100);
 }
 
 function saveCurrentSession() {
