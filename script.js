@@ -194,7 +194,13 @@ function addMessageToChat(message, sender) {
 
     if (currentSessionId && sender == 'ai') {
         const session = chatSessions[currentSessionId];
+        console.log('Checking title generation:', {
+            sessionId: currentSessionId,
+            messageCount: session?.messages?.length,
+            sessionName: session?.name
+        });
         if (session && session.messages.length >=2 && session.name.startsWith('Chat ')) {
+            console.log('Triggering title generation for session:', currentSessionId);
             setTimeout(() => generateSessionTitle(currentSessionId), 1000);
         }
     }
