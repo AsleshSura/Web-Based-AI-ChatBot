@@ -129,6 +129,8 @@ function addMessageToChat(message, sender) {
     messageContent.appendChild(messageText);
     messageContent.appendChild(timeSpan);
 
+    messageDiv.appendChild(messageContent);
+
     if (sender === 'ai') {
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-button';
@@ -137,10 +139,8 @@ function addMessageToChat(message, sender) {
         copyButton.addEventListener('click', function() {
             copyMessageToClipboard(message, copyButton);
         });
-        messageContent.appendChild(copyButton);
+        messageDiv.appendChild(copyButton);
     }
-
-    messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -309,6 +309,8 @@ function addMessageToHistory(message, sender, timestamp) {
     messageContent.appendChild(messageText);
     messageContent.appendChild(timeSpan);
 
+    messageDiv.appendChild(messageContent);
+
     if (sender === 'ai') {
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-button';
@@ -323,10 +325,8 @@ function addMessageToHistory(message, sender, timestamp) {
         copyButton.addEventListener('click', function() {
             copyMessageToClipboard(plainText, copyButton);
         });
-        messageContent.appendChild(copyButton);
+        messageDiv.appendChild(copyButton);
     }
-
-    messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
 }
 
