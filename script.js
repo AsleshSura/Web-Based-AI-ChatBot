@@ -40,7 +40,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const sessionsList = document.getElementById('sessionsList');
 
     newSessionBtn.addEventListener('click', createNewSession);
-    sidebarToggle.addEventListener('click', toggleSidebar);
+    sidebarToggle.addEventListener('click', function() {
+        sessionsSidebar.classList.toggle('collapsed');
+        document.querySelector('.chat-container').classList.toggle('full-width');
+    });
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -548,9 +551,4 @@ function loadChatSessions() {
 
 function saveChatSessions() {
     localStorage.setItem('chatSessions', JSON.stringify(chatSessions));
-}
-
-function toggleSidebar() {
-    sessionsSidebar.classList.toggle('collapsed');
-    document.querySelector('.chat-container').classList.toggle('full-width');
 }
