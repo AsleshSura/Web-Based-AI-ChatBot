@@ -248,13 +248,6 @@ function formatAIMessage(text) {
     return text;
 }
 
-function showLoading(show) {
-    if (show) {
-        loadingIndicator.style.display = 'block';
-    } else {
-        loadingIndicator.style.display = 'none';
-    }
-}
 
 function autoResizeTextArea(textarea) {
     textarea.style.height = 'auto';
@@ -511,7 +504,7 @@ function renderSessionsList() {
             sessionEl.classList.add('active');
         }
 
-        const preview = session.messages.length > 0 ? stripHTML(sendMessage.messages[session.messages.length - 1].content).substring(0, 50) + '...' : 'New conversation';
+        const preview = session.messages.length > 0 ? stripHTML(session.messages[session.messages.length - 1].content).substring(0, 50) + '...' : 'New conversation';
 
         sessionEl.innerHTML = `
             <div class="session-title">${session.name}</div>
@@ -519,7 +512,7 @@ function renderSessionsList() {
             <div class="session-date">${new Date(session.lastActive).toLocaleDateString()}</div>
         `;
 
-        sessionEl.addEventListener('click', () => switchToSession(sessionId));
+        sessionEl.addEventListener('click', () => switchToSession(session.id));
         sessionsList.appendChild(sessionEl);
     });
 }
