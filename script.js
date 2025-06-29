@@ -191,6 +191,13 @@ function addMessageToChat(message, sender) {
 
     // Save chat history after adding message
     saveChatHistory();
+
+    if (currentSessionId && sender == 'ai') {
+        const session = chatSessions[currentSessionId];
+        if (session && session.message.length >=2 && session.name.startsWith('Chat ')) {
+            setTimeout(() => generateSessionTitle(currentSessionId), 1000);
+        }
+    }
 }
 
 function copyMessageToClipboard(message, button) {
@@ -426,6 +433,54 @@ function downloadFile(content, filename, contentType) {
 
     const exportMessage = `Chat exported successfully as ${filename}!`;
     addMessageToChat(`📥 ${exportMessage}`, 'ai');
+}
+
+async function generateSessionTitle(sessionId) {
+    const session = chatSessions[sessionId];
+    if (!session || session.messages.length < 2) {
+        return;
+    }
+
+    try {
+        const messagesToSummarize = session.message.slice(0,6);
+        let conversationContext = '';
+
+        messagesToSummarize.forEach(msg => {
+            const sender = msg.sender == 'user' ? 'User' : 'AI';
+            const content = stripHTML(msg.content).substring(0, 200);
+            conversationContext += `${sender}: #{content}\n`;
+        });
+
+        const titlePrompt = `Based on this conversation, generate a short, descriptive title (max 4 words) that captures the main topic or question. Only respond with the title, nothing else:\n\n${conversationContext}`;
+
+        const response = await fetch('https://ai.hackclub.com/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messages: [
+                    {role: 'user', content: titlePrompt}
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.choices[0] && data.choices[0].message) {
+            let newTitle = data.choices[0].message.content.trim();
+
+            newTitle = newTitle.replace(/['"]/g, '').substring(0,30);
+
+            chatSessions[sessionId].name = newTitle;
+            saveChatSessions();
+            renderSessionsList();
+
+            console.log(`Generated title for session ${sessionId}: ${newTitle}`);
+        }
+    } catch (error) {
+        console.error('Error generating session title:', error);
+    }
 }
 
 function createNewSession() {

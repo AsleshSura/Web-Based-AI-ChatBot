@@ -119,7 +119,6 @@ body {
 .chat-messages {
     flex: 1;
     padding: 20px;
-    padding-bottom: 100px;
     overflow-y: auto;
     overflow-x: visible;
     background: #f8f9fa;
@@ -223,14 +222,8 @@ body {
 }
 
 .chat-input-container {
-    position: absolute;
-    width: 100%;
-    max-width: 800px;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
     padding: 20px;
-    background: white;
+    background: #f8f9fa;
     border-top: 1px solid #e9ecef;
     border-radius: 0 0 20px 20px;
 }
@@ -675,7 +668,7 @@ body.dark-mode {
 }
 
 .sessions-sidebar.collapsed {
-    transform: translateX(-240px);
+    transform: translateX(-100%);
 }
 
 .sessions-header {
@@ -729,7 +722,7 @@ body.dark-mode {
     transform: translateX(2px);
 }
 
-.session-item:active {
+.session-item.active {
     background: #4facfe;
     color: white;
     border-left: 3px solid #00f2fe;
