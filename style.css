@@ -35,6 +35,10 @@ body {
     margin: 20px;
 }
 
+.chat-container.full-width .chat-input-container {
+    border-radius: 0 0 20px 20px;
+}
+
 .chat-header {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     color: white;
@@ -225,7 +229,7 @@ body {
     padding: 20px;
     background: #f8f9fa;
     border-top: 1px solid #e9ecef;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 20px 0;
 }
 
 .chat-input {

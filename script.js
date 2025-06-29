@@ -442,7 +442,7 @@ async function generateSessionTitle(sessionId) {
     }
 
     try {
-        const messagesToSummarize = session.message.slice(0,6);
+        const messagesToSummarize = session.messages.slice(0,6);
         let conversationContext = '';
 
         messagesToSummarize.forEach(msg => {
