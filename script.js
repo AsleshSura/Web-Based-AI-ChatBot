@@ -94,26 +94,7 @@ document.addEventListener('DOMContentLoaded', function(){
     
     // Initialize layout optimization
     initializeLayoutOptimization();
-    
-    // Start with sidebar collapsed for maximum chat space
-    initializeSidebarCollapsed();
 });
-
-// Initialize sidebar as collapsed by default
-function initializeSidebarCollapsed() {
-    const sessionsSidebar = document.getElementById('sessionsSidebar');
-    const chatContainer = document.querySelector('.chat-container');
-    
-    // Start with sidebar collapsed to maximize chat space
-    sessionsSidebar.classList.add('collapsed');
-    chatContainer.classList.add('full-width');
-    
-    // Ensure layout is optimized after initialization
-    setTimeout(() => {
-        adjustLayoutToFullViewport();
-        optimizeChatContainer();
-    }, 100);
-}
 
 // Layout optimization functions
 function initializeLayoutOptimization() {
@@ -140,6 +121,15 @@ function adjustLayoutToFullViewport() {
     body.style.padding = '0';
     body.style.overflow = 'hidden';
     
+    // Force sidebar to full height when visible
+    if (sidebar && !sidebar.classList.contains('collapsed')) {
+        sidebar.style.height = '100vh';
+        sidebar.style.margin = '0';
+        sidebar.style.maxHeight = '100vh';
+        sidebar.style.width = 'clamp(250px, 25vw, 320px)';
+        sidebar.style.minWidth = '250px';
+    }
+    
     // Force chat container to full height
     if (chatContainer) {
         chatContainer.style.height = '100vh';
@@ -157,18 +147,7 @@ function adjustLayoutToFullViewport() {
             const sidebarWidth = sidebar ? sidebar.offsetWidth : 0;
             chatContainer.style.width = `calc(100vw - ${sidebarWidth}px)`;
             chatContainer.style.borderRadius = '0 1.5vw 1.5vw 0';
-            if (sidebar) {
-                sidebar.style.width = 'clamp(250px, 25vw, 320px)';
-                sidebar.style.minWidth = '250px';
-            }
         }
-    }
-    
-    // Force sidebar to full height when visible
-    if (sidebar && !sidebar.classList.contains('collapsed')) {
-        sidebar.style.height = '100vh';
-        sidebar.style.margin = '0';
-        sidebar.style.maxHeight = '100vh';
     }
 }
 
