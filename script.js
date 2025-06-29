@@ -61,6 +61,16 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+    closeExportModal.addEventListener('click', function(){
+        exportModal.classList.remove('show');
+    });
+
+    exportModal.addEventListener('click', function(e){
+        if (e.target === exportModal) {
+            exportModal.classList.remove('show');
+        }
+    })
+
     exportJSONBtn.addEventListener('click', function(){
         exportChatAsJSON();
         exportModal.classList.remove('show');
@@ -367,8 +377,8 @@ function exportChatAsJSON() {
 
     const exportData = {
         exportDate: new Date().toISOString(),
-        charTitle: "AI Chat Conversation",
-        messageCount: message.length,
+        chatTitle: "AI Chat Conversation",
+        messageCount: messages.length,
         messages:messages
     };
 
@@ -382,11 +392,12 @@ function exportChatAsText() {
     let textContent = `AI Chat Conversation\n`;
     textContent += `Exported: ${new Date().toLocaleString()}\n`;
     textContent += `Total Messages: ${messages.length}\n`;
+    textContent += `${'='.repeat(50)}\n\n`
 
     messages.forEach((msg, index) => {
        const sender = msg.sender === 'ai' ? 'AI Assistant' : 'You';
        const cleanContent = stripHTML(msg.content);
-       textContent += `[${msg.timestamp}] ${sender}:\n{cleanContent}\n\n`; 
+       textContent += `[${msg.timestamp}] ${sender}:\n${cleanContent}\n\n`; 
     });
 
     downloadFile(textContent, 'chat-export.txt', 'text/plain');
@@ -409,7 +420,7 @@ function getChatData() {
                 plainText: stripHTML(messageContent.innerHTML)
             });
         }
-    })
+    });
     return messages;
 }
 
@@ -435,5 +446,5 @@ function downloadFile(content, filename, contentType) {
     URL.revokeObjectURL(url);
 
     const exportMessage = `Chat exported successfully as ${filename}`;
-    addMessageToChat(`${exportMessage}`, 'ai');
+    addMessageToChat(`📥 ${exportMessage}`, 'ai');
 }
