@@ -245,29 +245,6 @@ body {
     width: 100%;
 }
 
-.credit-box {
-    position: fixed;
-    bottom: 2vh;
-    left: 2vw;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 0.8vh 1.2vw;
-    border-radius: clamp(6px, 0.8vw, 12px);
-    font-size: clamp(9px, 1vw, 12px);
-    color: #666;
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    z-index: 50;
-    transition: all 0.3s ease;
-    opacity: 0.7;
-}
-
-.credit-box:hover {
-    opacity: 1;
-    transform: translateY(-2px);
-}
-
 #messageInput {
     flex: 1;
     padding: clamp(8px, 1.5vh, 16px) clamp(12px, 2vw, 20px);
@@ -379,12 +356,6 @@ body.dark-mode {
 .dark-mode .ai-message .inline-code {
     background: #2c3e50;
     color: #ecf0f1;
-}
-
-.dark-mode .credit-box {
-    background: rgba(44, 62, 80, 0.8);
-    color: #bdc3c7;
-    border: 1px solid rgba(52, 73, 94, 0.5);
 }
 
 .copy-button {
