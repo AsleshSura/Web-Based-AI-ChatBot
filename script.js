@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     newSessionBtn.addEventListener('click', createNewSession);
     sidebarToggle.addEventListener('click', function() {
+        console.log('Sidebar toggle clicked'); // Debug line
         sessionsSidebar.classList.toggle('collapsed');
         document.querySelector('.chat-container').classList.toggle('full-width');
     });
