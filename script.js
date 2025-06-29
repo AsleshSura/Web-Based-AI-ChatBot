@@ -1,4 +1,3 @@
-
 const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
 const chatMessages = document.getElementById('chatMessages');
@@ -246,7 +245,7 @@ function formatAIMessage(text) {
     text = text.replace(/^[-*]\s(.+)$/gm, '<div class="list-item bullet">• $1</div>');
     
     return text;
-}
+} 
 
 
 function autoResizeTextArea(textarea) {
@@ -549,4 +548,9 @@ function loadChatSessions() {
 
 function saveChatSessions() {
     localStorage.setItem('chatSessions', JSON.stringify(chatSessions));
+}
+
+function toggleSidebar() {
+    sessionsSidebar.classList.toggle('collapsed');
+    document.querySelector('.chat-container').classList.toggle('full-width');
 }
