@@ -11,6 +11,9 @@
                 <h1>Web-Based AI ChatBot</h1>
                 <p>Powered by HackClub AI</p>
                 <div class="header-controls">
+                    <button class="export-chat-button" id="exportChatButton" title="Export chat history">
+                        📥
+                    </button>
                     <button class="clear-chat-button" id="clearChatButton" title="Clear chat history">
                         🗑️
                     </button>
@@ -41,6 +44,28 @@
         </div>
 
         <div class="credit-box">By: Aslesh Sura</div>
+
+        <div class="modal-overlay" id="exportModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Export Chat History</h3>
+                    <button class="modal-close" id="closeExportModal">@times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Choose your export format:</p>
+                    <div class="export-options">
+                        <button class="export-option-btn" id="exportJSON">
+                            JSON Format
+                            <span class="export-desc">Structured data with timestamps</span>
+                        </button>
+                        <button class="export-option-btn" id="exportTXT">
+                            Text Format
+                            <span class="export-desc">Plain text conversation</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="script.js"></script>
 
