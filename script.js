@@ -121,32 +121,34 @@ function adjustLayoutToFullViewport() {
     body.style.padding = '0';
     body.style.overflow = 'hidden';
     
-    // Force sidebar to full height when visible
-    if (sidebar && !sidebar.classList.contains('collapsed')) {
-        sidebar.style.height = '100vh';
-        sidebar.style.margin = '0';
-        sidebar.style.maxHeight = '100vh';
-        sidebar.style.width = 'clamp(250px, 25vw, 320px)';
-        sidebar.style.minWidth = '250px';
-    }
-    
     // Force chat container to full height
     if (chatContainer) {
         chatContainer.style.height = '100vh';
-        chatContainer.style.margin = '0';
         chatContainer.style.maxHeight = '100vh';
         
-        // If sidebar is collapsed, take full width
+        // If sidebar is collapsed, make container 90% width and right-aligned
         if (sidebar && sidebar.classList.contains('collapsed')) {
-            chatContainer.style.width = '100vw';
-            chatContainer.style.borderRadius = '1.5vw';
+            chatContainer.style.width = '90vw';
+            chatContainer.style.marginLeft = 'auto';
+            chatContainer.style.marginRight = '0';
+            chatContainer.style.borderRadius = '1.5vw 0 0 1.5vw';
             sidebar.style.width = '0';
             sidebar.style.minWidth = '0';
         } else {
-            // Calculate available width when sidebar is visible
-            const sidebarWidth = sidebar ? sidebar.offsetWidth : 0;
-            chatContainer.style.width = `calc(100vw - ${sidebarWidth}px)`;
+            // When sidebar is visible, container takes remaining space
+            chatContainer.style.width = 'calc(100vw - clamp(250px, 25vw, 320px))';
+            chatContainer.style.marginLeft = '0';
+            chatContainer.style.marginRight = '0';
             chatContainer.style.borderRadius = '0 1.5vw 1.5vw 0';
+            
+            // Force sidebar to full height when visible
+            if (sidebar) {
+                sidebar.style.height = '100vh';
+                sidebar.style.margin = '0';
+                sidebar.style.maxHeight = '100vh';
+                sidebar.style.width = 'clamp(250px, 25vw, 320px)';
+                sidebar.style.minWidth = '250px';
+            }
         }
     }
 }

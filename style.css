@@ -39,14 +39,15 @@ body {
 }
 
 .chat-container.full-width {
-    border-radius: 1.5vw;
+    border-radius: 1.5vw 0 0 1.5vw;
     margin: 0;
-    width: 100vw;
-    border-radius: 1.5vw 1.5vw 1.5vw 1.5vw;
+    width: 90vw;
+    margin-left: auto;
+    margin-right: 0;
 }
 
 .chat-container.full-width .chat-input-container {
-    border-radius: 0 0 1.5vw 1.5vw;
+    border-radius: 0 0 0 1.5vw;
 }
 
 .chat-header {
