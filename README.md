@@ -198,8 +198,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🔗 Links
 
 - [HackClub AI API](https://ai.hackclub.com/)
-- [GitHub Repository](https://github.com/yourusername/Web-based-AI-ChatBot)
-- [Live Demo](https://yourusername.github.io/Web-based-AI-ChatBot)
+- [GitHub Repository](https://github.com/AsleshSura/Web-based-AI-ChatBot)
+- [Live Demo](https://asleshsura.github.io/Web-based-AI-ChatBot/)
 
 ---
 
