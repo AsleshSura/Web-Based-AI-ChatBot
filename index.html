@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css?v=6">
+        <title>Web-Based AI ChatBot</title>
+        <link rel="stylesheet" href="style.css?v=7">
     </head>
     <body>
         <div class="sessions-sidebar" id="sessionsSidebar">
@@ -37,20 +38,20 @@
                 </div>
             </div>
 
-            <div class="chat-messages" id="chatMessages">
+            <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat conversation">
                 <!-- Messages will be added here dynamically -->
             </div>
             
             <div class="chat-input-container">
                 <div class="chat-input">
                     <textarea
-                        type="text"
                         id="messageInput"
                         placeholder="Type your message here... (Shift+Enter for new line)"
                         maxlength="500"
                         rows="1"
+                        aria-label="Message input"
                     ></textarea>
-                    <button id="sendButton">
+                    <button id="sendButton" aria-label="Send message">
                         <span>Send</span>
                     </button>
                 </div>

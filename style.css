@@ -74,6 +74,17 @@ body {
     margin-right: 15vw;
 }
 
+/* Center header content when sidebar is collapsed */
+.chat-container.full-width .chat-header h1 {
+    margin-right: 0;
+    text-align: center;
+}
+
+.chat-container.full-width .chat-header p {
+    margin-right: 0;
+    text-align: center;
+}
+
 .header-controls {
     position: absolute;
     top: 1.5vh;
@@ -201,7 +212,7 @@ body {
     border-radius: 8px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    margin: 8x 0;
+    margin: 8px 0;
     white-space: pre-wrap;
     overflow-x: auto;
 }
@@ -633,12 +644,9 @@ body.dark-mode {
     color: #ecf0f1;
 }
 
-.dark-mode .new-session-btn {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-}
-
-.dark-mode .new-session-btn:hover {
-    transform: scale(1.1);
+.dark-mode .sessions-sidebar.collapsed .sidebar-toggle {
+    background: rgba(44, 62, 80, 0.95);
+    color: #ecf0f1;
 }
 
 .session-item.active {
@@ -680,6 +688,18 @@ body.dark-mode {
     min-width: 0;
     margin: 0;
     visibility: hidden;
+}
+
+.sessions-sidebar.collapsed .sidebar-toggle {
+    visibility: visible;
+    position: fixed;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .sessions-header {

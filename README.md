@@ -202,5 +202,5 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - [Live Demo](https://asleshsura.github.io/Web-based-AI-ChatBot/)
 
 ---
-
+BRUH IDK WHY THIS WON'T WORK.
 **Enjoy chatting with your AI assistant! 🤖✨**
