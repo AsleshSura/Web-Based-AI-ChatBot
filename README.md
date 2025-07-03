@@ -2,7 +2,7 @@
 
 A modern, responsive AI chatbot powered by HackClub's AI API. Clean interface, persistent chat sessions, and no backend required - perfect for static hosting.
 
-## 🌐 [Try It Live!](https://asleshsura.github.io/Web-based-AI-ChatBot/)
+## 🌐 [Try It Live!](https://asleshsura.github.io/Web-Based-AI-ChatBot/)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white)
