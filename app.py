@@ -41,7 +41,8 @@ def get_ai_response(message):
     data = {
           "messages": [
                {'role': "user", 'content': message}
-          ]
+          ],
+          "reasoning_format": "parsed"
      }
 
     try:

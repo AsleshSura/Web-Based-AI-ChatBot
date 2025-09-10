@@ -223,7 +223,8 @@ async function sendMessage() {
             body: JSON.stringify({
                 messages: [
                     {role: 'user', content: message}
-                ]
+                ],
+                "reasoning_format": 'parsed'
             })
         });
 
